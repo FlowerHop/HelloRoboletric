@@ -2,14 +2,26 @@ package com.flowerhop.helloroboletric
 
 import androidx.lifecycle.Lifecycle
 import androidx.test.core.app.ActivityScenario
+import org.junit.After
 import org.junit.Assert
+import org.junit.Before
 import org.junit.Test
 
 class LifeStateTraceInstrumentedTest {
+    private lateinit var scenario: ActivityScenario<MainActivity>
+    @Before
+    fun setUp() {
+        scenario = ActivityScenario.launch(MainActivity::class.java)
+    }
+
+    @After
+    fun tearDown() {
+        scenario.close()
+    }
+
     @Test
     fun isResumed() {
         // Arrange
-        val scenario = ActivityScenario.launch(MainActivity::class.java)
         val expected = LifeState.Resumed
 
         // Act
@@ -22,7 +34,6 @@ class LifeStateTraceInstrumentedTest {
     @Test
     fun isStartedFromResumed() {
         // Arrange
-        val scenario = ActivityScenario.launch(MainActivity::class.java)
         val expected = LifeState.Started
 
         // Act
@@ -36,7 +47,6 @@ class LifeStateTraceInstrumentedTest {
     @Test
     fun isCreatedFromStarted() {
         // Arrange
-        val scenario = ActivityScenario.launch(MainActivity::class.java)
         scenario.moveToState(Lifecycle.State.STARTED)
         val expected = LifeState.Created
 
@@ -51,7 +61,6 @@ class LifeStateTraceInstrumentedTest {
     @Test
     fun isDestroyed() {
         // Arrange
-        val scenario = ActivityScenario.launch(MainActivity::class.java)
         scenario.moveToState(Lifecycle.State.STARTED)
         scenario.moveToState(Lifecycle.State.CREATED)
         val expected = true
