@@ -3,11 +3,15 @@ package com.flowerhop.helloroboletric
 import android.content.Context
 import android.content.SharedPreferences
 
-class CountRepository(private val applicationContext: Context) {
+class CountRepository private constructor(private val applicationContext: Context) {
     companion object {
         private const val SHARED_PREF_FILE_NAME = "CountRepository"
         private const val SHARED_PREF_KEY_COUNT = "count"
         private const val DEFAULT_COUNT = 0
+
+        fun create(context: Context): CountRepository {
+            return CountRepository(context)
+        }
     }
 
     private var sharedCount = 0
