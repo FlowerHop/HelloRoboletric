@@ -2,10 +2,14 @@ package com.flowerhop.helloroboletric
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
+import androidx.test.core.app.ApplicationProvider
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Assert
 import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
 
+@RunWith(AndroidJUnit4::class)
 class CountViewModelTest {
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
@@ -13,7 +17,7 @@ class CountViewModelTest {
     @Test
     fun `Default count is 0`() {
         // Arrange
-        val repo = CountRepository()
+        val repo = CountRepository(ApplicationProvider.getApplicationContext())
         val viewModel = CountViewModel(repo)
         val expected = 0
 
@@ -27,7 +31,7 @@ class CountViewModelTest {
     @Test
     fun `Observe count becomes 2 when addCount is invoked twice`() {
         // Arrange
-        val repo = CountRepository()
+        val repo = CountRepository(ApplicationProvider.getApplicationContext())
         val viewModel = CountViewModel(repo)
         val expected = 2
         var count = viewModel.count.value

@@ -1,13 +1,26 @@
 package com.flowerhop.helloroboletric
 
-class CountRepository {
+import android.content.Context
+import android.content.SharedPreferences
+
+class CountRepository(private val applicationContext: Context) {
+    companion object {
+        private const val SHARED_PREF_FILE_NAME = "CountRepository"
+        private const val SHARED_PREF_KEY_COUNT = "count"
+        private const val DEFAULT_COUNT = 0
+    }
+
     private var sharedCount = 0
 
-    fun loadCount(): Int {
-        return sharedCount
-    }
+    fun loadCount(): Int =
+        getShared().getInt(SHARED_PREF_KEY_COUNT, DEFAULT_COUNT)
 
     fun updateCount(count: Int) {
         sharedCount = count
+        getShared().edit().putInt(SHARED_PREF_KEY_COUNT, sharedCount).apply()
+    }
+
+    private fun getShared(): SharedPreferences {
+        return applicationContext.getSharedPreferences(SHARED_PREF_FILE_NAME, Context.MODE_PRIVATE)
     }
 }
