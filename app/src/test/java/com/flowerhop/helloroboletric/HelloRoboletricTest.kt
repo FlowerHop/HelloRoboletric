@@ -6,6 +6,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.android.controller.ActivityController
 
 @RunWith(RobolectricTestRunner::class)
 class HelloRoboletricTest {
@@ -38,5 +39,33 @@ class HelloRoboletricTest {
 
         // Assert
         Assert.assertEquals(expected, btn.text)
+    }
+
+    @Test
+    fun `Test LifeStateTrace is Resumed`() {
+        // Arrange
+        val activityController = Robolectric.buildActivity(MainActivity::class.java)
+        val expected = LifeState.Resumed
+
+        // Act
+        activityController.create().start().resume()
+        val state = (activityController.get() as MainActivity).stateTrace.state
+
+        // Assert
+        Assert.assertEquals(expected, state)
+    }
+
+    @Test
+    fun `Test LifeStateTrace is Destroyed`() {
+        // Arrange
+        val activityController = Robolectric.buildActivity(MainActivity::class.java)
+        val expected = LifeState.Destroyed
+
+        // Act
+        activityController.create().start().resume().pause().stop().destroy()
+        val state = (activityController.get() as MainActivity).stateTrace.state
+
+        // Assert
+        Assert.assertEquals(expected, state)
     }
 }
